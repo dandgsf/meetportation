@@ -163,11 +163,3 @@ Validado em Windows 11, macOS (Apple Silicon) e Linux.
 ## Aviso sobre terceiros
 
 `assets/teleport.wav` foi gerado com o ElevenLabs Sound Effects. Não é áudio de anime. `assets/teleport-synth.wav` é sintetizado pelo código deste repositório. Dragon Ball e os personagens associados são marcas de seus titulares. Este repositório não inclui imagem nem áudio original da obra.
-
-## Contato
-
-Danilo Fernandes, [Marktracking](https://marktracking.com.br).
-
-- Site: [marktracking.com.br](https://marktracking.com.br)
-- Instagram: [@danilodgsf](https://www.instagram.com/danilodgsf/)
-- E-mail: [contato@marktracking.com.br](mailto:contato@marktracking.com.br)
