@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Meetportation Camera",
+  "version": "1.1",
+  "description": "Troca a câmera do Google Meet pelo vídeo do Meetportation (ws://127.0.0.1:8765). Sem OBS.",
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*", "file:///*", "http://localhost/*", "http://127.0.0.1/*"],
+      "js": ["inject.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["https://meet.google.com/*", "file:///*", "http://localhost/*", "http://127.0.0.1/*"],
+      "js": ["bridge.js"],
+      "run_at": "document_start"
+    }
+  ]
+}

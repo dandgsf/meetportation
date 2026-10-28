@@ -1,0 +1,40 @@
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Modelos baixados na primeira execução e dados locais
+# (foto do fundo da sala, som pessoal)
+models/
+data/
+
+# Saídas de teste e gravação
+*.mp4
+e2e_out/
+saida_e2e/
+
+# Segredos e credenciais — não versionar
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+secrets.json
+*.secret
+id_rsa
+id_ed25519
+
+# Sistema e editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.log
