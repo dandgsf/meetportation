@@ -46,16 +46,17 @@ No macOS, o Terminal pede permissão de câmera na primeira execução. Conceda 
 
 ## Modo Google Meet, sem OBS
 
-Use este modo no Google Meet, no Teams web e no Zoom web.
+Use a extensão no Google Meet. Para Teams ou Zoom, use o modo câmera virtual abaixo.
 
 1. No Chrome, abra `chrome://extensions`.
 2. Ative **Modo do desenvolvedor**.
 3. Clique em **Carregar sem compactação** e escolha a pasta `chrome-extension`.
 4. Na raiz do repositório, execute `run-meet.bat` no Windows ou `./run-meet.sh` no macOS e no Linux.
 5. Quando a contagem aparecer, saia do quadro até a captura do fundo terminar.
-6. Abra o Meet. A câmera **Meetportation (teletransporte)** já vem selecionada. Se a aba já estava aberta, recarregue.
+6. Abra a aba da reunião no Google Meet. Clique no ícone da extensão, cole o código desta execução e escolha **Ligar nesta aba**. O código aparece no terminal interativo. Você também pode pressionar **P** na janela de preview para mostrá-lo ou ocultá-lo.
+7. No Meet, selecione **Meetportation (teletransporte)**. Para encerrar, clique em **Desligar nesta aba**. Recarregar a página exige novo pareamento. Ligar em outra aba encerra o envio para a anterior.
 
-O Python envia o vídeo por WebSocket em `ws://127.0.0.1:8765`. A extensão troca a câmera só dentro da aba. O microfone continua o da máquina. O passo a passo da extensão, arquivo por arquivo, está em [chrome-extension/README.md](chrome-extension/README.md).
+Com a extensão pareada, o Python envia o vídeo por WebSocket em `ws://127.0.0.1:8765`. A extensão troca a câmera só dentro da aba. O microfone continua o da máquina. O passo a passo da extensão, arquivo por arquivo, está em [chrome-extension/README.md](chrome-extension/README.md).
 
 A porta padrão é `8765`. Se mudar com `--ws-port`, altere também `WS_URL` em `chrome-extension/background.js`.
 
@@ -117,8 +118,8 @@ Ordem do som, quando `--sound` não é informado:
 
 | Sintoma | O que fazer |
 |---|---|
-| O Meet não mostra imagem na câmera Meetportation | Confirme que `run-meet` está aberto. Em `chrome://extensions`, recarregue a extensão e atualize a aba do Meet. |
-| Quadro escuro com o texto "aguardando o Python" | A extensão está ativa e não encontrou o programa. Abra `run-meet`. |
+| O Meet não mostra imagem na câmera Meetportation | Abra `run-meet`, pareie a aba pelo ícone da extensão e selecione a câmera no Meet. |
+| Código recusado | Copie o código da execução atual. Reiniciar o Python gera outro código. |
 | `OBS Virtual Camera is not installed` | Instale o OBS 30 ou mais novo. No macOS, ative a câmera virtual uma vez, como descrito acima. |
 | Teams ou Zoom não lista "OBS Virtual Camera" | Abra o Meetportation antes do aplicativo de reunião, ou reinicie o aplicativo. |
 | O gesto não dispara | Aperte `d` e observe a distância entre os dedos e a testa. Tente `--radius 0.8`. |
