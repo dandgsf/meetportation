@@ -107,6 +107,8 @@ def banner(img, text, sub=""):
 
 def main(argv=None):
     args = parse_args(argv)
+    if args.ws and args.headless and not sys.stderr.isatty():
+        sys.exit("O modo --ws --headless requer um terminal interativo para exibir o código de pareamento.")
     cap, is_cam = open_capture(args)
     ok, frame = cap.read()
     if not ok:
@@ -130,9 +132,16 @@ def main(argv=None):
     sinks = []
     if not args.no_vcam:
         sinks.append(VirtualCamSink(W, H, args.fps, backend=args.vcam_backend))
+    ws_sink = None
+    show_pairing = False
     if args.ws:
         from .wsserver import WebSocketSink
-        sinks.append(WebSocketSink(port=args.ws_port, fps=args.fps))
+        ws_sink = WebSocketSink(port=args.ws_port, fps=args.fps)
+        sinks.append(ws_sink)
+        if sys.stderr.isatty():
+            print(f"[extensão] Código desta execução: {ws_sink.pairing_code}", file=sys.stderr)
+        elif not args.headless:
+            print("[extensão] Pressione P no preview para ver o código de pareamento.")
     if args.record:
         sinks.append(RecorderSink(args.record, W, H, args.fps))
     out = Sinks(sinks)
@@ -199,12 +208,16 @@ def main(argv=None):
                     preview = banner(preview, *banner_args)
                 elif engine is not None and debug:
                     draw_debug_text(preview, info, KEYS_HELP)
+                if show_pairing and ws_sink:
+                    preview = banner(preview, ws_sink.pairing_code, "Somente neste preview. P para ocultar.")
                 pw = 960
                 ph = int(preview.shape[0] * pw / preview.shape[1])
                 cv2.imshow(win, cv2.resize(preview, (pw, ph)))
                 key = cv2.waitKey(1) & 0xFF
                 if key in (ord("q"), 27):
                     break
+                if key == ord("p") and ws_sink:
+                    show_pairing = not show_pairing
                 if key == ord("d"):
                     debug = not debug
                 if key == ord(" ") and engine is not None:

@@ -11,17 +11,17 @@ O microfone não é trocado. Só a câmera de vídeo.
 3. Ative **Modo do desenvolvedor**.
 4. Clique em **Carregar sem compactação** e selecione esta pasta (`chrome-extension`), não a raiz do repositório.
 5. Execute `run-meet.bat` ou `./run-meet.sh`. Espere a captura do fundo terminar.
-6. Abra o Google Meet. Se a aba já estava aberta, recarregue.
-7. Na seleção de câmera, use **Meetportation (teletransporte)**. Na maior parte dos casos ela já entra selecionada.
+6. Abra a reunião no Google Meet. Clique no ícone da extensão nessa aba. Cole o código exibido no terminal e clique em **Ligar nesta aba**. A tecla **P** também mostra ou oculta o código no preview do Python.
+7. Selecione **Meetportation (teletransporte)** no Meet. Use **Desligar nesta aba** para parar. Ao recarregar a página, autorize de novo. Se mudar de aba de reunião, pareie a nova aba para transferir o vídeo.
 
-A extensão também pode ser usada no Teams e no Zoom abertos no navegador, no mesmo fluxo.
+O código muda a cada execução do Python. O modo `--ws --headless` requer um terminal interativo. Para o Teams e o Zoom, use a câmera virtual conforme o guia principal.
 
 ## O que cada arquivo faz
 
 | Arquivo | Função |
 |---|---|
 | `manifest.json` | Declara a extensão e em quais páginas ela entra. |
-| `background.js` | Único ponto que conecta ao Python. Recebe JPEG por WebSocket e repassa às abas. |
+| `background.js` | Único ponto que conecta ao Python. Autentica a conexão local e encaminha JPEG ao documento selecionado. |
 | `bridge.js` | Desenha cada frame num canvas escondido da página. |
 | `inject.js` | Faz o site enxergar esse canvas como webcam, via `getUserMedia` e `enumerateDevices`. |
 
@@ -35,8 +35,8 @@ O padrão é `8765`, o mesmo de `run-meet`. Se você subir o Python com `--ws-po
 
 | O que você vê | O que fazer |
 |---|---|
-| Texto verde "aguardando o Python" | A extensão está carregada e o WebSocket não conectou. Abra `run-meet` e confira se o terminal mostra `WebSocket ws://127.0.0.1:8765`. |
-| Texto "conectando à extensão..." | Recarregue a extensão e depois a aba. |
+| Código recusado | Abra `run-meet` e cole o código desta execução no popup. |
+| O popup pede para recarregar a aba | Recarregue a aba do Google Meet e clique outra vez no ícone da extensão. |
 | O Meet ainda usa a webcam real | Recarregue a aba depois de carregar a extensão. Selecione **Meetportation (teletransporte)** na lista de câmeras. |
 | Mudou a porta e continua sem imagem | `background.js` e `--ws-port` precisam ser iguais. Recarregue a extensão depois de editar o arquivo. |
 

@@ -7,12 +7,15 @@
   const origEnum = md.enumerateDevices.bind(md);
   const FAKE_ID = "meetportation-cam";
   const LABEL = "Meetportation (teletransporte)";
-  let stream = null;
+  let stream = null, source = null;
 
   function canvasStream() {
     const c = document.getElementById("meetportation-canvas");
     if (!c) return null;
-    if (!stream || !stream.active) stream = c.captureStream(30);
+    if (source !== c || !stream?.active) {
+      stream = c.captureStream(30);
+      source = c;
+    }
     return stream;
   }
 
@@ -28,6 +31,7 @@
 
   md.enumerateDevices = async () => {
     const devs = await origEnum();
+    if (!document.getElementById("meetportation-canvas")) return devs;
     const fake = { deviceId: FAKE_ID, groupId: "meetportation", kind: "videoinput", label: LABEL,
                    toJSON() { return this; } };
     return [fake, ...devs];
@@ -36,7 +40,13 @@
   md.getUserMedia = async (constraints) => {
     if (!wantsFake(constraints)) return origGUM(constraints);
     const cs = canvasStream();
-    if (!cs) return origGUM(constraints);
+    if (!cs) {
+      const exact = constraints.video?.deviceId?.exact;
+      if (exact === FAKE_ID || (Array.isArray(exact) && exact.length === 1 && exact[0] === FAKE_ID)) {
+        throw new DOMException("Pareie a extensão nesta aba.", "NotFoundError");
+      }
+      return origGUM(constraints);
+    }
     const out = new MediaStream();
     const vt = cs.getVideoTracks()[0].clone();
     try { Object.defineProperty(vt, "label", { value: LABEL }); } catch (e) {}
